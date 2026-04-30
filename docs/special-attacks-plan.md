@@ -30,6 +30,20 @@
   - Nieuwe DB-schema's.
   - Full-fidelity van alle niche/raid-only specials als systemen ontbreken.
 
+## Resterende specials matrix
+| Weapon | Item ids / variants | Special name | Energy cost | Combat type | Complexity | Status | Required mechanics | Runtime smoke-test steps |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Granite maul | `granite_maul`, `granite_maul_pretty`, `granite_maul_plus`, `granite_maul_pretty_plus`, `br_granite_maul` | Quick Smash | enum-driven | melee | medium | implemented (partial) | melee hit + spec anim/spot; instant queue nuance ontbreekt | Spawn/equip -> toggle special -> `Attack` NPC -> verify energy drain + hit + no exception |
+| Dragon longsword | `dragon_longsword`, `bh_dragon_longsword_imbue`, `bh_dragon_longsword_corrupted` | Cleave | enum-driven | melee | low | implemented | melee damage/accuracy multiplier + cleave gfx | Spawn/equip -> toggle special -> `Attack` NPC -> verify boosted hit + energy |
+| Dragon spear family | `dragon_spear`, `dragon_spear_p`, `dragon_spear_p+`, `dragon_spear_p++`, BH/corrupt variants | Shove | enum-driven | melee utility | high | deferred | forced movement, stun rules, PvP-safe collision | Spawn/equip -> verify special bar only; full runtime deferred pending movement subsystem |
+| Zamorakian spear/hasta | `zamorak_hasta` | Shove | enum-driven | melee utility | high | deferred | idem spear forced movement/stun behavior | Spawn/equip -> verify special bar only; defer functional assertion |
+| Magic shortbow | `magic_shortbow`, `magic_shortbow_i` | Snapshot | enum-driven | ranged | medium | implemented | quiver ammo checks, double projectile/hit queue | Spawn/equip -> load arrows -> toggle special -> `Attack` NPC -> verify 2 hits + energy |
+| Dragon crossbow | `xbows_crossbow_dragon`, `bh_xbows_crossbow_dragon_corrupted` | Annihilate | enum-driven | ranged | low | implemented | crossbow projectile + boosted ranged hit | Spawn/equip -> load bolts -> toggle special -> `Attack` NPC -> verify hit + energy |
+| Armadyl crossbow | `acb`, `br_acb` | Armadyl Eye | enum-driven | ranged | medium | implemented (partial) | boosted ranged roll; exact armour-pierce formula deferred | Spawn/equip -> load bolts -> toggle special -> `Attack` NPC -> verify hit + energy |
+| Rune thrownaxe | `rune_thrownaxe` | Chainhit | enum-driven | ranged utility | high | deferred | bounce-target selection + chained hit scheduling | Spawn/equip -> verify special bar only; full effect deferred |
+| Dark bow | `dark_bow` variants (existing mapping) | Descent of Darkness/Dragons | enum-driven | ranged | medium | implemented | double projectile + ammo use + dragon-arrow branch | Spawn/equip -> load arrows -> toggle special -> `Attack` NPC -> verify 2 projectiles/hits + energy |
+| Barrelchest anchor | `brain_anchor`, `bh_brain_anchor_imbue` | Sunder | enum-driven | melee | low | implemented | boosted crush hit + anchor spec gfx | Spawn/equip -> toggle special -> `Attack` NPC -> verify boosted hit + energy |
+
 ## Weapon matrix
 | Weapon | Special name | Energy cost | Existing? | MVP behavior | Required systems | Status |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -40,23 +54,26 @@
 | Dragon mace | Shatter | enum-driven | no | single hit, acc/dmg boost | accuracy multiplier, damage multiplier, animation | missing |
 | Dragon battleaxe | Rampage | enum-driven | no | instant stat shift | instant special, stat drain/boost | missing |
 | Dragon warhammer | Smash | enum-driven | no | single hit, high acc, def drain on hit (partial) | accuracy multiplier, stat drain | partial |
-| Granite maul | Quick Smash | enum-driven | no | immediate heavy melee hit | instant/combat hybrid behavior, next-attack delay | missing |
+| Granite maul | Quick Smash | enum-driven | no | heavy melee hit + spec gfx (instant queue nuance deferred) | instant/combat hybrid behavior, next-attack delay | partial |
 | Abyssal dagger | Abyssal Puncture | enum-driven | no | high-acc stab hit | accuracy multiplier, animation/spotanim | missing |
 | Abyssal whip | Energy Drain | enum-driven | no | hit + run-disable (partial) | control effect, accuracy logic | partial |
 | Dragon halberd | Sweep | enum-driven | no | primary hit, optional extra tile logic deferred | animation, multi-target/position logic | partial |
 | Dragon claws | Slice and Dice | enum-driven | no | 4-hit chained roll (deferred exact formula) | multi-hit custom damage formula | blocked |
-| Magic shortbow(i) | Snapshot | enum-driven | no | double-shot spec | ranged multi-hit projectile | missing |
+| Magic shortbow(i) | Snapshot | enum-driven | no | double-shot spec | ranged multi-hit projectile | implemented |
 | Toxic blowpipe | Toxic Siphon | enum-driven | no | ranged hit + heal fraction | projectile, healing | missing |
 | Armadyl godsword | The Judgement | enum-driven | no | strong accuracy/damage melee hit | damage multiplier, accuracy multiplier | missing |
 | Bandos godsword | Warstrike | enum-driven | no | hit + stat drain | stat drain | missing |
 | Saradomin godsword | Healing Blade | enum-driven | no | hit + heal + prayer restore | healing | missing |
 | Zamorak godsword | Ice Cleave | enum-driven | no | hit + freeze | freeze/bind | missing |
-| Dragon crossbow | Annihilate | enum-driven | no | ranged hit with boosted damage | projectile, damage multiplier | missing |
-| Armadyl crossbow | Armadyl Eye | enum-driven | no | ranged hit with armor pierce style behavior | projectile, custom defence roll | blocked |
+| Dragon crossbow | Annihilate | enum-driven | no | ranged hit with boosted damage | projectile, damage multiplier | implemented |
+| Armadyl crossbow | Armadyl Eye | enum-driven | no | ranged hit with boosted accuracy/damage (defence-pierce nuance deferred) | projectile, custom defence roll | partial |
 | Light/Heavy ballista | Power Shot | enum-driven | no | ranged heavy hit | projectile, damage multiplier | missing |
 | Elder maul | Pulverise | enum-driven | no | heavy hit + impact gfx | damage multiplier, animation/spotanim | missing |
 | Voidwaker | Disrupt | enum-driven | no | magic-typed guaranteed-like hit behavior | custom hit type, projectile/spotanim | blocked |
 | Ancient godsword | Blood Sacrifice | enum-driven | no | delayed effect | delayed effect queue, PvP tuning | skipped for MVP |
+| Barrelchest anchor | Sunder | enum-driven | no | heavy crush hit + spec gfx | melee multiplier + animation/spotanim | implemented |
+| Dragon spear / Zamorakian spear / Zamorak hasta | Shove / Impale | enum-driven | no | forced movement/stun spec | forced movement, stun immunity, PvP-safe handling | deferred |
+| Rune thrownaxe | Chainhit | enum-driven | no | primary ranged hit + bounce chain | target chaining, multi-target queueing | deferred |
 
 ## Implementation groups
 
@@ -99,6 +116,7 @@
 ### G. Complex/deferred
 - Ancient godsword delayed effect, voidwaker magic-like behavior, claws exact damage chain, PvP-only nuances.
 - Reden: meerdere ontbrekende of niet-afgegrensde subsystemen; te risicovol voor MVP-first batch.
+- Dragon/Zamorak spear forced movement + stun, en rune thrownaxe chain-bounce zijn hier expliciet ondergebracht.
 
 ## Implementation order
 1. Low-risk melee specs
@@ -124,6 +142,12 @@
 | Dragon mace | `::item 1434` | NPC | boosted hit, energy consumed | Runtime pass confirmed after login attack-option varp sync fix; NPC attack path restored (`opnpc2`) | passed |
 | Abyssal dagger | `::item 13265` | NPC | boosted stab hit | Runtime pass confirmed after login attack-option varp sync fix; NPC attack path restored (`opnpc2`) | passed |
 | Dragon battleaxe | `::item 1377` | self | instant stat changes + energy consumed | Runtime pass confirmed; instant stat-shift spec triggers and consumes energy | passed |
+| Granite maul | `::item 4153` | NPC | boosted crush hit + spec gfx | Pending batch-2 runtime validation | pending |
+| Barrelchest anchor | `::item 10887` | NPC | boosted crush hit + spec gfx | Pending batch-2 runtime validation | pending |
+| Magic shortbow | `::item 861` | NPC | double ranged hit + energy consumed | Pending batch-2 runtime validation | pending |
+| Magic shortbow (i) | `::item 12788` | NPC | double ranged hit + energy consumed | Pending batch-2 runtime validation | pending |
+| Dragon crossbow | `::item 21902` | NPC | boosted ranged hit + energy consumed | Pending batch-2 runtime validation | pending |
+| Armadyl crossbow | `::item 11785` | NPC | boosted ranged hit + energy consumed | Pending batch-2 runtime validation | pending |
 
 ## Runtime result summary
 | Weapon | Runtime result | Evidence | Notes |
@@ -141,3 +165,13 @@
   - `option_attackpriority_npc` (`1306`)
 - This fix is included in this branch via cherry-pick:
   - `fix(login): sync attack option varps on login`
+
+## Batch 2 runtime result summary
+| Weapon | Runtime result | Evidence | Notes |
+| --- | --- | --- | --- |
+| Granite maul | partial | Runtime smoke passed for special activation, energy drain, hit path | Gfx/animation not always matching expected OSRS fidelity |
+| Barrelchest anchor | partial | Runtime smoke passed for special activation, energy drain, hit path | Gfx/animation not always matching expected OSRS fidelity |
+| Magic shortbow | partial | Runtime smoke passed for double-shot flow and energy drain | Visual fidelity (gfx/anim timing) inconsistent in some attempts |
+| Magic shortbow (i) | partial | Runtime smoke passed for double-shot flow and energy drain | Visual fidelity (gfx/anim timing) inconsistent in some attempts |
+| Dragon crossbow | partial | Runtime smoke passed for activation, ranged hit path, energy drain | Visual fidelity (gfx/anim) not always exact |
+| Armadyl crossbow | partial | Runtime smoke passed for activation, ranged hit path, energy drain | Visual fidelity (gfx/anim) not always exact |
