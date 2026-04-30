@@ -47,3 +47,14 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+# Local runtime/state data
+.local/
+server/.data/cache/**
+server/.data/saves/**
+server/.data/game.key
+server/.data/client.key
+
+# Sensitive or generated artifacts
+*.bin
+.env

@@ -12,6 +12,7 @@ import net.rsprot.protocol.loginprot.outgoing.LoginResponse
 import org.rsmod.api.account.AccountManager
 import org.rsmod.api.account.loader.request.AccountLoadAuth
 import org.rsmod.api.config.refs.modlevels
+import org.rsmod.api.core.Build
 import org.rsmod.api.net.rsprot.player.AccountLoadResponseHook
 import org.rsmod.api.net.rsprot.provider.Js5Store
 import org.rsmod.api.pw.hash.PasswordHashing
@@ -53,20 +54,30 @@ private constructor(
         responseHandler: GameLoginResponseHandler<Player>,
         block: LoginBlock<AuthenticationType>,
     ) {
+        logger.info {
+            "Incoming login/js5 session: username='${block.username}', expectedRevision=${Build.MAJOR}"
+        }
         if (accountManager.isLoaderShuttingDown()) {
+            logger.warn { "Login rejected: account loader shutting down." }
             responseHandler.writeFailedResponse(LoginResponse.LoginServerOffline)
             return
         }
 
         if (accountManager.isLoaderRejectingRequests()) {
+            logger.warn { "Login rejected: account loader rejecting requests." }
             responseHandler.writeFailedResponse(LoginResponse.LoginServerNoReply)
             return
         }
 
         if (!block.crc.validate(js5Crc)) {
+            logger.warn {
+                "Login rejected: JS5 CRC mismatch for username='${block.username}'. " +
+                    "received=${block.crc}, expectedCount=${js5Crc.size}"
+            }
             responseHandler.writeFailedResponse(LoginResponse.OutOfDateReload)
             return
         }
+        logger.info { "JS5 CRC accepted for username='${block.username}'." }
 
         when (val auth = block.authentication) {
             is AuthenticationType.PasswordAuthentication -> passLogin(responseHandler, block, auth)
@@ -206,6 +217,9 @@ private constructor(
         block: LoginBlock<XteaKey>,
     ) {
         // TODO: Reconnection.
+        logger.warn {
+            "Reconnect rejected: unimplemented reconnect flow for username='${block.username}'."
+        }
         responseHandler.writeFailedResponse(LoginResponse.ConnectFail)
     }
 }

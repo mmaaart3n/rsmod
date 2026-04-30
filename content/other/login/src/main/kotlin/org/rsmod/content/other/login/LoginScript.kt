@@ -7,6 +7,7 @@ import net.rsprot.protocol.game.outgoing.misc.client.HideObjOps
 import net.rsprot.protocol.game.outgoing.misc.client.MinimapToggle
 import net.rsprot.protocol.game.outgoing.misc.client.ResetAnims
 import net.rsprot.protocol.game.outgoing.misc.player.ChatFilterSettings
+import net.rsprot.protocol.game.outgoing.misc.player.ChatFilterSettingsPrivateChat
 import net.rsprot.protocol.game.outgoing.varp.VarpReset
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.inv.weight.InvWeight
@@ -67,6 +68,7 @@ constructor(
 
     private fun Player.sendChatFilters() {
         client.write(ChatFilterSettings(0, 0))
+        client.write(ChatFilterSettingsPrivateChat(0))
     }
 
     private fun Player.sendOpVisibility() {

@@ -4,6 +4,7 @@ import org.rsmod.api.account.character.inv.CharacterInventoryApplier
 import org.rsmod.api.account.character.inv.CharacterInventoryPipeline
 import org.rsmod.api.account.character.main.CharacterAccountApplier
 import org.rsmod.api.account.character.main.CharacterAccountRepository
+import org.rsmod.api.account.character.social.SocialRepository
 import org.rsmod.api.account.character.stats.CharacterStatApplier
 import org.rsmod.api.account.character.stats.CharacterStatPipeline
 import org.rsmod.module.ExtendedModule
@@ -11,6 +12,7 @@ import org.rsmod.module.ExtendedModule
 public object CharacterModule : ExtendedModule() {
     override fun bind() {
         bindInstance<CharacterAccountRepository>()
+        bindInstance<SocialRepository>()
 
         bindInstance<CharacterAccountApplier>()
         bindInstance<CharacterInventoryApplier>()

@@ -7,6 +7,8 @@ import net.rsprot.protocol.common.client.OldSchoolClientType
 import org.rsmod.api.core.Build
 import org.rsmod.api.game.process.GameLifecycle
 import org.rsmod.api.net.rsprot.player.SessionStart
+import org.rsmod.api.net.rsprot.player.SocialLoginSync
+import org.rsmod.api.net.rsprot.player.SocialPresenceService
 import org.rsmod.api.net.rsprot.provider.SimpleXteaProvider
 import org.rsmod.api.registry.region.RegionRegistry
 import org.rsmod.api.script.onEvent
@@ -29,16 +31,25 @@ constructor(
     private val service: NetworkService<Player>,
     private val objTypes: ObjTypeList,
     private val regionReg: RegionRegistry,
+    private val socialLoginSync: SocialLoginSync,
+    private val socialPresenceService: SocialPresenceService,
 ) : PluginScript() {
+    private val pendingSocialSync: MutableSet<Player> = linkedSetOf()
+    private val pendingPresenceOnline: MutableSet<Player> = linkedSetOf()
+    private val pendingPresenceOffline: MutableSet<Player> = linkedSetOf()
+
     override fun ScriptContext.startup() {
         check(RSProtConstants.REVISION == Build.MAJOR) {
             "RSProt and RSMod have mismatching revision builds! " +
                 "(rsmod=${Build.MAJOR}, rsprot=${RSProtConstants.REVISION})"
         }
         onEvent<GameLifecycle.Startup> { initService() }
-        onEvent<GameLifecycle.UpdateInfo> { updateService() }
+        onEvent<GameLifecycle.UpdateInfo> { updateServiceAndSyncSocial() }
         onEvent<SessionStart> { startSession() }
         onEvent<SessionStateEvent.Delete> { closeSession() }
+        onEvent<SessionStateEvent.Login> { queueSocialSync(player) }
+        onEvent<SessionStateEvent.Login> { queuePresenceOnline(player) }
+        onEvent<SessionStateEvent.Logout> { queuePresenceOffline(player) }
         onEvent<NpcStateEvents.Create> { createNpcAvatar(npc) }
         onEvent<NpcStateEvents.Delete> { deleteNpcAvatar(npc) }
     }
@@ -47,9 +58,60 @@ constructor(
         service.setCommunicationThread(Thread.currentThread())
     }
 
-    private fun updateService() {
+    private fun updateServiceAndSyncSocial() {
         service.playerInfoProtocol.update()
         service.npcInfoProtocol.update()
+        flushSocialLoginSync()
+        flushPresenceOnline()
+        flushPresenceOffline()
+    }
+
+    private fun queueSocialSync(player: Player) {
+        pendingSocialSync += player
+    }
+
+    private fun queuePresenceOnline(player: Player) {
+        pendingPresenceOnline += player
+    }
+
+    private fun queuePresenceOffline(player: Player) {
+        pendingPresenceOffline += player
+    }
+
+    private fun flushSocialLoginSync() {
+        if (pendingSocialSync.isEmpty()) {
+            return
+        }
+        val iterator = pendingSocialSync.iterator()
+        while (iterator.hasNext()) {
+            val player = iterator.next()
+            socialLoginSync.sync(player)
+            iterator.remove()
+        }
+    }
+
+    private fun flushPresenceOnline() {
+        if (pendingPresenceOnline.isEmpty()) {
+            return
+        }
+        val iterator = pendingPresenceOnline.iterator()
+        while (iterator.hasNext()) {
+            val player = iterator.next()
+            socialPresenceService.notifyOnline(player)
+            iterator.remove()
+        }
+    }
+
+    private fun flushPresenceOffline() {
+        if (pendingPresenceOffline.isEmpty()) {
+            return
+        }
+        val iterator = pendingPresenceOffline.iterator()
+        while (iterator.hasNext()) {
+            val player = iterator.next()
+            socialPresenceService.notifyOffline(player)
+            iterator.remove()
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
