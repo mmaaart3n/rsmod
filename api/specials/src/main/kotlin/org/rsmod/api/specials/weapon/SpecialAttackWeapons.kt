@@ -47,6 +47,34 @@ constructor(private val enumResolver: EnumTypeMapResolver) {
         requirements.putIfAbsent(TOXIC_BLOWPIPE, 500)
         requirements.putIfAbsent(TOXIC_BLOWPIPE_LOADED, 500)
         requirements.putIfAbsent(TOXIC_BLOWPIPE_LOADED_ORNAMENT, 500)
+        requirements.putIfAbsent(RUNE_THROWNAXE, 500)
+        requirements.putIfAbsent(DRAGON_SPEAR, 250)
+        requirements.putIfAbsent(DRAGON_SPEAR_P, 250)
+        requirements.putIfAbsent(DRAGON_SPEAR_P_PLUS, 250)
+        requirements.putIfAbsent(DRAGON_SPEAR_P_PLUS_PLUS, 250)
+        requirements.putIfAbsent(TBWT_DRAGON_SPEAR_KP, 250)
+        requirements.putIfAbsent(BRUT_DRAGON_SPEAR, 250)
+        requirements.putIfAbsent(BRUT_DRAGON_SPEAR_P, 250)
+        requirements.putIfAbsent(BRUT_DRAGON_SPEAR_P_PLUS, 250)
+        requirements.putIfAbsent(BRUT_DRAGON_SPEAR_P_PLUS_PLUS, 250)
+        requirements.putIfAbsent(BRUT_DRAGON_SPEAR_KP, 250)
+        requirements.putIfAbsent(BH_DRAGON_SPEAR_CORRUPTED, 250)
+        requirements.putIfAbsent(BH_DRAGON_SPEAR_P_CORRUPTED, 250)
+        requirements.putIfAbsent(BH_DRAGON_SPEAR_P_PLUS_CORRUPTED, 250)
+        requirements.putIfAbsent(BH_DRAGON_SPEAR_P_PLUS_PLUS_CORRUPTED, 250)
+        requirements.putIfAbsent(ZAMORAK_SPEAR, 250)
+        requirements.putIfAbsent(ZAMORAK_HASTA, 250)
+        requirements.putIfAbsent(LIGHT_BALLISTA, 650)
+        requirements.putIfAbsent(HEAVY_BALLISTA, 650)
+        requirements.putIfAbsent(BR_LIGHT_BALLISTA, 650)
+        requirements.putIfAbsent(BR_HEAVY_BALLISTA, 650)
+        requirements.putIfAbsent(HEAVY_BALLISTA_ORNAMENT, 650)
+        requirements.putIfAbsent(VOIDWAKER, 500)
+        requirements.putIfAbsent(BR_VOIDWAKER, 500)
+        requirements.putIfAbsent(DEADMAN_BLIGHTED_VOIDWAKER, 500)
+        requirements.putIfAbsent(DEADMAN_VOIDWAKER, 500)
+        requirements.putIfAbsent(ANCIENT_GODSWORD, 500)
+        requirements.putIfAbsent(BR_ANCIENT_GODSWORD, 500)
 
         return requirements
     }
@@ -67,5 +95,33 @@ constructor(private val enumResolver: EnumTypeMapResolver) {
         private const val TOXIC_BLOWPIPE = 12924
         private const val TOXIC_BLOWPIPE_LOADED = 12926
         private const val TOXIC_BLOWPIPE_LOADED_ORNAMENT = 28688
+        private const val RUNE_THROWNAXE = 805
+        private const val DRAGON_SPEAR = 1249
+        private const val DRAGON_SPEAR_P = 1263
+        private const val DRAGON_SPEAR_P_PLUS = 5716
+        private const val DRAGON_SPEAR_P_PLUS_PLUS = 5730
+        private const val TBWT_DRAGON_SPEAR_KP = 3176
+        private const val BRUT_DRAGON_SPEAR = 22731
+        private const val BRUT_DRAGON_SPEAR_P = 22734
+        private const val BRUT_DRAGON_SPEAR_P_PLUS = 22737
+        private const val BRUT_DRAGON_SPEAR_P_PLUS_PLUS = 22740
+        private const val BRUT_DRAGON_SPEAR_KP = 22743
+        private const val BH_DRAGON_SPEAR_CORRUPTED = 28041
+        private const val BH_DRAGON_SPEAR_P_CORRUPTED = 28043
+        private const val BH_DRAGON_SPEAR_P_PLUS_CORRUPTED = 28045
+        private const val BH_DRAGON_SPEAR_P_PLUS_PLUS_CORRUPTED = 28047
+        private const val ZAMORAK_SPEAR = 11824
+        private const val ZAMORAK_HASTA = 11889
+        private const val LIGHT_BALLISTA = 19478
+        private const val HEAVY_BALLISTA = 19481
+        private const val BR_LIGHT_BALLISTA = 27188
+        private const val BR_HEAVY_BALLISTA = 23630
+        private const val HEAVY_BALLISTA_ORNAMENT = 26712
+        private const val VOIDWAKER = 27690
+        private const val BR_VOIDWAKER = 27869
+        private const val DEADMAN_BLIGHTED_VOIDWAKER = 28531
+        private const val DEADMAN_VOIDWAKER = 29607
+        private const val ANCIENT_GODSWORD = 26233
+        private const val BR_ANCIENT_GODSWORD = 27184
     }
 }

@@ -27,5 +27,11 @@ object SpecialAttackSpotanims : SpotanimReferences() {
     val sgs = find("godwars_godsword_saradomin_spot")
     val zgs = find("godwars_godsword_zamorak_spot")
     val dragon_claws = find("dragon_claws_spot")
+    val dragon_spear = find("league_5_spear_shield_special_vfx")
+    val rune_thrownaxe = find("rune_dart_travel")
+    val ballista = find("ballista_special")
+    val voidwaker = find("fx_voidwaker02_special")
+    val voidwaker_impact = find("fx_voidwaker_impact")
+    val ancient_godsword = find("xbows_blood_sacrifice_spot_anim")
     val toxic_blowpipe = find("toxic_blowpipe_specialattack")
 }

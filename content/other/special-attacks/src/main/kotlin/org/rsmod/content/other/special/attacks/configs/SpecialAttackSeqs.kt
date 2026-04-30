@@ -40,6 +40,11 @@ object SpecialAttackSeqs : SeqReferences() {
     val sgs = find("sgs_special_player")
     val zgs = find("zgs_special_player")
     val dragon_claws = find("human_dragon_claws_spec")
+    val dragon_spear = find("league_5_spear_shield_special")
+    val rune_thrownaxe = find("human_throw_dart1")
+    val ballista = find("ballista_special_attack")
+    val voidwaker = find("human_special_voidwaker")
+    val ancient_godsword = find("xbows_blood_sacrifice")
     val toxic_blowpipe = find("snakeboss_blowpipe_attack")
     val toxic_blowpipe_ornament = find("snakeboss_blowpipe_attack_ornament")
 }
