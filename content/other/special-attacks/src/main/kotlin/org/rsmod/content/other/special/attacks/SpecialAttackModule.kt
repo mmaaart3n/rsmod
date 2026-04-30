@@ -1,21 +1,37 @@
 package org.rsmod.content.other.special.attacks
 
 import org.rsmod.api.specials.SpecialAttackMap
+import org.rsmod.content.other.special.attacks.boost.DragonBattleaxeSpecialAttack
 import org.rsmod.content.other.special.attacks.boost.StatBoostSpecialAttacks
-import org.rsmod.content.other.special.attacks.melee.BatchTwoMeleeSpecialAttacks
+import org.rsmod.content.other.special.attacks.melee.AbyssalDaggerSpecialAttack
+import org.rsmod.content.other.special.attacks.melee.BarrelchestAnchorSpecialAttack
+import org.rsmod.content.other.special.attacks.melee.DragonDaggerSpecialAttack
 import org.rsmod.content.other.special.attacks.melee.DragonLongswordSpecialAttack
-import org.rsmod.content.other.special.attacks.melee.LowRiskMeleeSpecialAttacks
-import org.rsmod.content.other.special.attacks.ranged.BatchTwoRangedSpecialAttacks
+import org.rsmod.content.other.special.attacks.melee.DragonMaceSpecialAttack
+import org.rsmod.content.other.special.attacks.melee.DragonScimitarSpecialAttack
+import org.rsmod.content.other.special.attacks.melee.GraniteMaulSpecialAttack
+import org.rsmod.content.other.special.attacks.ranged.ArmadylCrossbowSpecialAttack
 import org.rsmod.content.other.special.attacks.ranged.DarkBowSpecialAttack
+import org.rsmod.content.other.special.attacks.ranged.DragonCrossbowSpecialAttack
+import org.rsmod.content.other.special.attacks.ranged.MagicShortbowSpecialAttack
 import org.rsmod.plugin.module.PluginModule
 
 class SpecialAttackModule : PluginModule() {
     override fun bind() {
         addSetBinding<SpecialAttackMap>(StatBoostSpecialAttacks::class.java)
+        addSetBinding<SpecialAttackMap>(DragonBattleaxeSpecialAttack::class.java)
+
         addSetBinding<SpecialAttackMap>(DarkBowSpecialAttack::class.java)
+        addSetBinding<SpecialAttackMap>(MagicShortbowSpecialAttack::class.java)
+        addSetBinding<SpecialAttackMap>(DragonCrossbowSpecialAttack::class.java)
+        addSetBinding<SpecialAttackMap>(ArmadylCrossbowSpecialAttack::class.java)
+
         addSetBinding<SpecialAttackMap>(DragonLongswordSpecialAttack::class.java)
-        addSetBinding<SpecialAttackMap>(LowRiskMeleeSpecialAttacks::class.java)
-        addSetBinding<SpecialAttackMap>(BatchTwoMeleeSpecialAttacks::class.java)
-        addSetBinding<SpecialAttackMap>(BatchTwoRangedSpecialAttacks::class.java)
+        addSetBinding<SpecialAttackMap>(DragonDaggerSpecialAttack::class.java)
+        addSetBinding<SpecialAttackMap>(DragonScimitarSpecialAttack::class.java)
+        addSetBinding<SpecialAttackMap>(DragonMaceSpecialAttack::class.java)
+        addSetBinding<SpecialAttackMap>(AbyssalDaggerSpecialAttack::class.java)
+        addSetBinding<SpecialAttackMap>(GraniteMaulSpecialAttack::class.java)
+        addSetBinding<SpecialAttackMap>(BarrelchestAnchorSpecialAttack::class.java)
     }
 }

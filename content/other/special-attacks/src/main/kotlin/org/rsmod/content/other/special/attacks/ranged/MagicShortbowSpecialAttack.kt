@@ -18,34 +18,15 @@ import org.rsmod.content.other.special.attacks.configs.special_spots
 import org.rsmod.game.entity.Npc
 import org.rsmod.game.entity.PathingEntity
 import org.rsmod.game.entity.Player
-import org.rsmod.game.type.obj.ObjType
 import org.rsmod.game.type.obj.ObjTypeList
-import org.rsmod.game.type.spot.SpotanimType
 
-class BatchTwoRangedSpecialAttacks
+class MagicShortbowSpecialAttack
 @Inject
 constructor(private val objTypes: ObjTypeList, private val ammunition: RangedAmmoManager) :
     SpecialAttackMap {
     override fun SpecialAttackRepository.register(manager: SpecialAttackManager) {
         registerRanged(special_objs.magic_shortbow, MagicShortbow(manager, ammunition, objTypes))
         registerRanged(special_objs.magic_shortbow_i, MagicShortbow(manager, ammunition, objTypes))
-
-        registerRanged(
-            special_objs.xbows_crossbow_dragon,
-            CrossbowSpecial(manager, ammunition, objTypes, 1.2, special_spots.dragon_crossbow),
-        )
-        registerRanged(
-            special_objs.bh_xbows_crossbow_dragon_corrupted,
-            CrossbowSpecial(manager, ammunition, objTypes, 1.2, special_spots.dragon_crossbow),
-        )
-        registerRanged(
-            special_objs.acb,
-            CrossbowSpecial(manager, ammunition, objTypes, 1.25, special_spots.armadyl_crossbow),
-        )
-        registerRanged(
-            special_objs.br_acb,
-            CrossbowSpecial(manager, ammunition, objTypes, 1.25, special_spots.armadyl_crossbow),
-        )
     }
 }
 
@@ -111,63 +92,6 @@ private class MagicShortbow(
         )
         ammunition.useQuiverAmmo(player, quiverType, target.coords, proj2.serverCycles)
         manager.queueRangedDamage(this, target, quiverType, damage2, proj2.serverCycles)
-        manager.continueCombat(this, target)
-        return true
-    }
-}
-
-private class CrossbowSpecial(
-    private val manager: SpecialAttackManager,
-    private val ammunition: RangedAmmoManager,
-    private val objTypes: ObjTypeList,
-    private val maxHitMultiplier: Double,
-    private val travelSpot: SpotanimType,
-) : RangedSpecialAttack {
-    override suspend fun ProtectedAccess.attack(target: Npc, attack: CombatAttack.Ranged): Boolean =
-        blast(target, attack)
-
-    override suspend fun ProtectedAccess.attack(
-        target: Player,
-        attack: CombatAttack.Ranged,
-    ): Boolean = blast(target, attack)
-
-    private fun ProtectedAccess.blast(target: PathingEntity, attack: CombatAttack.Ranged): Boolean {
-        val weaponType = objTypes[attack.weapon]
-        val quiverType = objTypes.getOrNull(player.quiver)
-
-        val canUseAmmo = ammunition.attemptAmmoUsage(player, weaponType, quiverType)
-        if (!canUseAmmo) {
-            manager.stopCombat(this)
-            return false
-        }
-        if (quiverType == null) {
-            manager.stopCombat(this)
-            mes("You need bolts in your quiver for this special attack.")
-            return false
-        }
-
-        anim(special_seqs.human_crossbow)
-        val projectile = manager.spawnProjectile(this, target, travelSpot, projanims.bolt)
-        val damage =
-            manager.rollRangedDamage(
-                source = this,
-                target = target,
-                attack = attack,
-                accuracyMultiplier = 1.15,
-                maxHitMultiplier = maxHitMultiplier,
-            )
-
-        manager.giveCombatXp(this, target, attack, damage)
-        ammunition.useQuiverAmmo(player, quiverType, target.coords, projectile.serverCycles)
-        val ammo: ObjType? = quiverType
-        manager.queueRangedHit(
-            source = this,
-            target = target,
-            ammo = ammo,
-            damage = damage,
-            clientDelay = projectile.clientCycles,
-            hitDelay = projectile.serverCycles,
-        )
         manager.continueCombat(this, target)
         return true
     }
