@@ -79,8 +79,8 @@ constructor(
         onCommand("master", "Max out all stats", ::master)
         onCommand("reset", "Reset all stats", ::reset)
         onCommand("mypos", "Get current coordinates", ::mypos)
-        onCommand("tele", "Teleport to coordgrid", ::tele) {
-            invalidArgs = "Use as ::tele level mx mz lx lz (ex: 0 50 50 0 0)"
+        onCommand("teleg", "Legacy teleport to coordgrid", ::tele) {
+            invalidArgs = "Use as ::teleg level mx mz lx lz (ex: 0 50 50 0 0)"
         }
         onCommand("telezone", "Teleport to zone key", ::teleZone) {
             invalidArgs = "Use as ::telezone zoneX zoneY level (ex: 400 400 0)"
