@@ -119,17 +119,25 @@
 ## Runtime smoke-test matrix
 | Weapon | Spawn command | Target | Expected | Capture/log evidence | Result |
 | --- | --- | --- | --- | --- | --- |
-| Dragon dagger | `::item 1215` | NPC (single) | 2 hits, energy consumed | Spawn confirmed in server log; no `opnpc2` evidence due to missing NPC attack option in runtime | blocked |
-| Dragon scimitar | `::item 4587` | NPC | boosted hit, energy consumed | Spawn confirmed in server log; no `opnpc2` evidence due to missing NPC attack option in runtime | blocked |
-| Dragon mace | `::item 1434` | NPC | boosted hit, energy consumed | Spawn confirmed in server log; no `opnpc2` evidence due to missing NPC attack option in runtime | blocked |
-| Abyssal dagger | `::item 13265` | NPC | boosted stab hit | Spawn confirmed in server log; no `opnpc2` evidence due to missing NPC attack option in runtime | blocked |
-| Dragon battleaxe | `::item 1377` | self | instant stat changes + energy consumed | Spawn confirmed in server log; activation check blocked until stable combat/special validation pass | blocked |
+| Dragon dagger | `::item 1215` | NPC (single) | 2 hits, energy consumed | Runtime pass confirmed after login attack-option varp sync fix; NPC attack path restored (`opnpc2`) | passed |
+| Dragon scimitar | `::item 4587` | NPC | boosted hit, energy consumed | Runtime pass confirmed after login attack-option varp sync fix; NPC attack path restored (`opnpc2`) | passed |
+| Dragon mace | `::item 1434` | NPC | boosted hit, energy consumed | Runtime pass confirmed after login attack-option varp sync fix; NPC attack path restored (`opnpc2`) | passed |
+| Abyssal dagger | `::item 13265` | NPC | boosted stab hit | Runtime pass confirmed after login attack-option varp sync fix; NPC attack path restored (`opnpc2`) | passed |
+| Dragon battleaxe | `::item 1377` | self | instant stat changes + energy consumed | Runtime pass confirmed; instant stat-shift spec triggers and consumes energy | passed |
 
 ## Runtime result summary
 | Weapon | Runtime result | Evidence | Notes |
 | --- | --- | --- | --- |
-| Dragon dagger | blocked | Server log shows item spawn; no NPC `Attack` option available, so no `opnpc2`/combat packet path | Needs attackable NPC target in current runtime world |
-| Dragon scimitar | blocked | Server log shows item spawn; no NPC `Attack` option available, so no `opnpc2`/combat packet path | Same blocker as above |
-| Dragon mace | blocked | Server log shows item spawn; no NPC `Attack` option available, so no `opnpc2`/combat packet path | Same blocker as above |
-| Abyssal dagger | blocked | Server log shows item spawn; no NPC `Attack` option available, so no `opnpc2`/combat packet path | Same blocker as above |
-| Dragon battleaxe | blocked | Item spawn confirmed; cannot complete confidence pass while combat-target path is blocked | Re-test when attack option is available |
+| Dragon dagger | passed | Special smoke-test passed after NPC attack option unblock; combat dispatch restored | Fast 2-hit spec validated |
+| Dragon scimitar | passed | Special smoke-test passed after NPC attack option unblock; combat dispatch restored | Spec activation and energy drain validated |
+| Dragon mace | passed | Special smoke-test passed after NPC attack option unblock; combat dispatch restored | Spec activation and boosted hit path validated |
+| Abyssal dagger | passed | Special smoke-test passed after NPC attack option unblock; combat dispatch restored | Spec activation and stab-hit path validated |
+| Dragon battleaxe | passed | Instant special validated in runtime pass | Stat shift + energy consume validated |
+
+## Runtime blocker status
+- Previous blocker `"NPC Attack option missing"` is **unblocked**.
+- Root cause was fixed via login-side varp sync for attack option priorities:
+  - `option_attackpriority` (`1107`)
+  - `option_attackpriority_npc` (`1306`)
+- This fix is included in this branch via cherry-pick:
+  - `fix(login): sync attack option varps on login`
