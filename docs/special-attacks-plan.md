@@ -142,12 +142,12 @@
 | Dragon mace | `::item 1434` | NPC | boosted hit, energy consumed | Runtime pass confirmed after login attack-option varp sync fix; NPC attack path restored (`opnpc2`) | passed |
 | Abyssal dagger | `::item 13265` | NPC | boosted stab hit | Runtime pass confirmed after login attack-option varp sync fix; NPC attack path restored (`opnpc2`) | passed |
 | Dragon battleaxe | `::item 1377` | self | instant stat changes + energy consumed | Runtime pass confirmed; instant stat-shift spec triggers and consumes energy | passed |
-| Granite maul | `::item 4153` | NPC | boosted crush hit + spec gfx | Pending batch-2 runtime validation | pending |
-| Barrelchest anchor | `::item 10887` | NPC | boosted crush hit + spec gfx | Pending batch-2 runtime validation | pending |
-| Magic shortbow | `::item 861` | NPC | double ranged hit + energy consumed | Pending batch-2 runtime validation | pending |
-| Magic shortbow (i) | `::item 12788` | NPC | double ranged hit + energy consumed | Pending batch-2 runtime validation | pending |
-| Dragon crossbow | `::item 21902` | NPC | boosted ranged hit + energy consumed | Pending batch-2 runtime validation | pending |
-| Armadyl crossbow | `::item 11785` | NPC | boosted ranged hit + energy consumed | Pending batch-2 runtime validation | pending |
+| Granite maul | `::item 4153` | NPC | boosted crush hit + spec gfx | Runtime pass: activation + energy + hit path confirmed | partial |
+| Barrelchest anchor | `::item 10887` | NPC | boosted crush hit + spec gfx | Runtime pass: activation + energy + hit path confirmed | partial |
+| Magic shortbow | `::item 861` | NPC | double ranged hit + energy consumed | Runtime pass: double-hit flow + energy confirmed | partial |
+| Magic shortbow (i) | `::item 12788` | NPC | double ranged hit + energy consumed | Runtime pass: double-hit flow + energy confirmed | partial |
+| Dragon crossbow | `::item 21902` | NPC | boosted ranged hit + energy consumed | Runtime pass: activation + ranged hit + energy confirmed | partial |
+| Armadyl crossbow | `::item 11785` | NPC | boosted ranged hit + energy consumed | Runtime pass: activation + ranged hit + energy confirmed | partial |
 
 ## Runtime result summary
 | Weapon | Runtime result | Evidence | Notes |
@@ -175,3 +175,24 @@
 | Magic shortbow (i) | partial | Runtime smoke passed for double-shot flow and energy drain | Visual fidelity (gfx/anim timing) inconsistent in some attempts |
 | Dragon crossbow | partial | Runtime smoke passed for activation, ranged hit path, energy drain | Visual fidelity (gfx/anim) not always exact |
 | Armadyl crossbow | partial | Runtime smoke passed for activation, ranged hit path, energy drain | Visual fidelity (gfx/anim) not always exact |
+
+## Batch 3 refactor structure
+- Refactor uitgevoerd naar weapon-family files (gedrag ongewijzigd):
+  - `DragonDaggerSpecialAttack.kt`
+  - `DragonScimitarSpecialAttack.kt`
+  - `DragonMaceSpecialAttack.kt`
+  - `AbyssalDaggerSpecialAttack.kt`
+  - `DragonBattleaxeSpecialAttack.kt`
+  - `GraniteMaulSpecialAttack.kt`
+  - `BarrelchestAnchorSpecialAttack.kt`
+  - `MagicShortbowSpecialAttack.kt`
+  - `DragonCrossbowSpecialAttack.kt`
+  - `ArmadylCrossbowSpecialAttack.kt`
+- Legacy batch-files verwijderd:
+  - `LowRiskMeleeSpecialAttacks.kt`
+  - `BatchTwoMeleeSpecialAttacks.kt`
+  - `BatchTwoRangedSpecialAttacks.kt`
+- Fidelity pass status:
+  - Functionele flow blijft stabiel (toggle, energy, hit/effect).
+  - Exacte OSRS anim/gfx timing blijft gedeeltelijk `partial` voor batch-2 wapens.
+  - Geen extra complexe mechanics toegevoegd in batch 3.
