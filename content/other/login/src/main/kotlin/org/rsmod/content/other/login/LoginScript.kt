@@ -10,6 +10,7 @@ import net.rsprot.protocol.game.outgoing.misc.player.ChatFilterSettings
 import net.rsprot.protocol.game.outgoing.misc.player.ChatFilterSettingsPrivateChat
 import net.rsprot.protocol.game.outgoing.varp.VarpReset
 import org.rsmod.api.config.refs.varbits
+import org.rsmod.api.config.refs.varps
 import org.rsmod.api.inv.weight.InvWeight
 import org.rsmod.api.player.output.Camera
 import org.rsmod.api.player.output.ChatType
@@ -64,6 +65,7 @@ constructor(
         sendOpVisibility()
         sendWelcomeMessage()
         sendVars()
+        sendCombatOptionPriorities()
     }
 
     private fun Player.sendChatFilters() {
@@ -94,6 +96,11 @@ constructor(
                 resyncVar(varp)
             }
         }
+    }
+
+    private fun Player.sendCombatOptionPriorities() {
+        resyncVar(varps.option_attackpriority)
+        resyncVar(varps.option_attackpriority_npc)
     }
 
     private fun Player.sendLowPriority() {
