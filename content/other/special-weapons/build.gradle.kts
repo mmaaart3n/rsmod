@@ -6,4 +6,5 @@ dependencies {
     implementation(projects.api.combat.combatManager)
     implementation(projects.api.pluginCommons)
     implementation(projects.api.weapons)
+    implementation(projects.engine.utilsBits)
 }

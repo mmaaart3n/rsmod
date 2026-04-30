@@ -43,6 +43,11 @@ constructor(private val enumResolver: EnumTypeMapResolver) {
             requirements[obj.id] = energy
         }
 
+        // Some weapon variants are not yet present in the cache enum table.
+        requirements.putIfAbsent(TOXIC_BLOWPIPE, 500)
+        requirements.putIfAbsent(TOXIC_BLOWPIPE_LOADED, 500)
+        requirements.putIfAbsent(TOXIC_BLOWPIPE_LOADED_ORNAMENT, 500)
+
         return requirements
     }
 
@@ -59,5 +64,8 @@ constructor(private val enumResolver: EnumTypeMapResolver) {
 
     private companion object {
         private const val MAX_ENERGY = SpecialAttackEnergy.MAX_ENERGY
+        private const val TOXIC_BLOWPIPE = 12924
+        private const val TOXIC_BLOWPIPE_LOADED = 12926
+        private const val TOXIC_BLOWPIPE_LOADED_ORNAMENT = 28688
     }
 }

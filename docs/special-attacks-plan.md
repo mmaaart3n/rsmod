@@ -49,26 +49,26 @@
 | --- | --- | --- | --- | --- | --- | --- |
 | Dragon longsword | Cleave | enum-driven | yes | single hit, 1.25x acc/dmg | damage multiplier, accuracy multiplier, animation/spotanim | implemented |
 | Dark bow | Descent of Darkness/Dragons | enum-driven | yes | double projectile hit, ammo checks | multi-hit, projectile, animation/sound | implemented |
-| Dragon dagger | Puncture | enum-driven | no | fast double-hit, high acc | multi-hit, accuracy multiplier, animation | missing |
+| Dragon dagger | Puncture | enum-driven | no | fast double-hit, high acc | multi-hit, accuracy multiplier, animation | implemented |
 | Dragon scimitar | Sever | enum-driven | no | single hit, increased acc, disable protect prayer (partial) | accuracy multiplier, animation/spotanim, PvP-state hook | partial |
-| Dragon mace | Shatter | enum-driven | no | single hit, acc/dmg boost | accuracy multiplier, damage multiplier, animation | missing |
-| Dragon battleaxe | Rampage | enum-driven | no | instant stat shift | instant special, stat drain/boost | missing |
+| Dragon mace | Shatter | enum-driven | no | single hit, acc/dmg boost | accuracy multiplier, damage multiplier, animation | implemented |
+| Dragon battleaxe | Rampage | enum-driven | no | instant stat shift | instant special, stat drain/boost | implemented |
 | Dragon warhammer | Smash | enum-driven | no | single hit, high acc, def drain on hit (partial) | accuracy multiplier, stat drain | partial |
 | Granite maul | Quick Smash | enum-driven | no | heavy melee hit + spec gfx (instant queue nuance deferred) | instant/combat hybrid behavior, next-attack delay | partial |
-| Abyssal dagger | Abyssal Puncture | enum-driven | no | high-acc stab hit | accuracy multiplier, animation/spotanim | missing |
+| Abyssal dagger | Abyssal Puncture | enum-driven | no | high-acc stab hit | accuracy multiplier, animation/spotanim | implemented |
 | Abyssal whip | Energy Drain | enum-driven | no | hit + run-disable (partial) | control effect, accuracy logic | partial |
 | Dragon halberd | Sweep | enum-driven | no | primary hit, optional extra tile logic deferred | animation, multi-target/position logic | partial |
 | Dragon claws | Slice and Dice | enum-driven | no | 4-hit chained roll (deferred exact formula) | multi-hit custom damage formula | blocked |
 | Magic shortbow(i) | Snapshot | enum-driven | no | double-shot spec | ranged multi-hit projectile | implemented |
 | Toxic blowpipe | Toxic Siphon | enum-driven | no | ranged hit + heal fraction | projectile, healing | missing |
-| Armadyl godsword | The Judgement | enum-driven | no | strong accuracy/damage melee hit | damage multiplier, accuracy multiplier | missing |
-| Bandos godsword | Warstrike | enum-driven | no | hit + stat drain | stat drain | missing |
-| Saradomin godsword | Healing Blade | enum-driven | no | hit + heal + prayer restore | healing | missing |
-| Zamorak godsword | Ice Cleave | enum-driven | no | hit + freeze | freeze/bind | missing |
+| Armadyl godsword | The Judgement | enum-driven | no | strong accuracy/damage melee hit | damage multiplier, accuracy multiplier | implemented |
+| Bandos godsword | Warstrike | enum-driven | no | hit + stat drain | stat drain | partial |
+| Saradomin godsword | Healing Blade | enum-driven | no | hit + heal + prayer restore | healing | partial |
+| Zamorak godsword | Ice Cleave | enum-driven | no | hit + freeze | freeze/bind | partial |
 | Dragon crossbow | Annihilate | enum-driven | no | ranged hit with boosted damage | projectile, damage multiplier | implemented |
 | Armadyl crossbow | Armadyl Eye | enum-driven | no | ranged hit with boosted accuracy/damage (defence-pierce nuance deferred) | projectile, custom defence roll | partial |
 | Light/Heavy ballista | Power Shot | enum-driven | no | ranged heavy hit | projectile, damage multiplier | missing |
-| Elder maul | Pulverise | enum-driven | no | heavy hit + impact gfx | damage multiplier, animation/spotanim | missing |
+| Elder maul | Pulverise | enum-driven | no | heavy hit + impact gfx | damage multiplier, animation/spotanim | implemented |
 | Voidwaker | Disrupt | enum-driven | no | magic-typed guaranteed-like hit behavior | custom hit type, projectile/spotanim | blocked |
 | Ancient godsword | Blood Sacrifice | enum-driven | no | delayed effect | delayed effect queue, PvP tuning | skipped for MVP |
 | Barrelchest anchor | Sunder | enum-driven | no | heavy crush hit + spec gfx | melee multiplier + animation/spotanim | implemented |

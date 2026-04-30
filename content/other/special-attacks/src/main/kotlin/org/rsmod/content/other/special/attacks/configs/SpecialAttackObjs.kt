@@ -36,4 +36,40 @@ object SpecialAttackObjs : ObjReferences() {
     val abyssal_dagger_p = find("abyssal_dagger_p")
     val abyssal_dagger_p_plus = find("abyssal_dagger_p+")
     val abyssal_dagger_p_plus_plus = find("abyssal_dagger_p++")
+
+    val dragon_warhammer = find("dragon_warhammer")
+    val dragon_warhammer_ornament = find("dragon_warhammer_ornament")
+    val bh_dragon_warhammer_corrupted = find("bh_dragon_warhammer_corrupted")
+    val br_dragon_warhammer = find("br_dragon_warhammer")
+
+    val dragon_halberd = find("dragon_halberd")
+    val bh_dragon_halberd_corrupted = find("bh_dragon_halberd_corrupted")
+
+    val abyssal_whip = find("abyssal_whip")
+    val abyssal_whip_lava = find("abyssal_whip_lava")
+    val abyssal_whip_ice = find("abyssal_whip_ice")
+    val br_abyssal_whip = find("br_abyssal_whip")
+
+    val elder_maul = find("elder_maul")
+    val elder_maul_ornament = find("elder_maul_ornament")
+    val br_elder_maul = find("br_elder_maul")
+
+    val ags = find("ags")
+    val bgs = find("bgs")
+    val sgs = find("sgs")
+    val zgs = find("zgs")
+
+    val dragon_claws = find("dragon_claws")
+    val toxic_blowpipe = find("toxic_blowpipe")
+    val toxic_blowpipe_loaded = find("toxic_blowpipe_loaded")
+    val toxic_blowpipe_loaded_ornament = find("toxic_blowpipe_loaded_ornament")
+    val bronze_dart = find("bronze_dart")
+    val iron_dart = find("iron_dart")
+    val steel_dart = find("steel_dart")
+    val black_dart = find("black_dart")
+    val mithril_dart = find("mithril_dart")
+    val adamant_dart = find("adamant_dart")
+    val rune_dart = find("rune_dart")
+    val amethyst_dart = find("amethyst_dart")
+    val dragon_dart = find("dragon_dart")
 }
