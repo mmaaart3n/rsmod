@@ -2,8 +2,10 @@ package org.rsmod.content.other.special.attacks
 
 import org.rsmod.api.specials.SpecialAttackMap
 import org.rsmod.content.other.special.attacks.boost.StatBoostSpecialAttacks
+import org.rsmod.content.other.special.attacks.melee.BatchTwoMeleeSpecialAttacks
 import org.rsmod.content.other.special.attacks.melee.DragonLongswordSpecialAttack
 import org.rsmod.content.other.special.attacks.melee.LowRiskMeleeSpecialAttacks
+import org.rsmod.content.other.special.attacks.ranged.BatchTwoRangedSpecialAttacks
 import org.rsmod.content.other.special.attacks.ranged.DarkBowSpecialAttack
 import org.rsmod.plugin.module.PluginModule
 
@@ -13,5 +15,7 @@ class SpecialAttackModule : PluginModule() {
         addSetBinding<SpecialAttackMap>(DarkBowSpecialAttack::class.java)
         addSetBinding<SpecialAttackMap>(DragonLongswordSpecialAttack::class.java)
         addSetBinding<SpecialAttackMap>(LowRiskMeleeSpecialAttacks::class.java)
+        addSetBinding<SpecialAttackMap>(BatchTwoMeleeSpecialAttacks::class.java)
+        addSetBinding<SpecialAttackMap>(BatchTwoRangedSpecialAttacks::class.java)
     }
 }
