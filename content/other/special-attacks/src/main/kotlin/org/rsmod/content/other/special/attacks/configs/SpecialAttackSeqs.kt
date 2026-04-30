@@ -22,4 +22,9 @@ object SpecialAttackSeqs : SeqReferences() {
     val rock_knocker_crystal_pickaxe = find("rockknocker_crystal", 1138222214380946360)
 
     val dragon_longsword = find("cleave", 5532192131862460952)
+    val dragon_dagger = find("puncture")
+    val dragon_scimitar = find("sp_attack_dragon_scimitar")
+    val dragon_mace = find("shatter")
+    val dragon_battleaxe = find("rampage")
+    val abyssal_dagger = find("abyssal_dagger_special")
 }
