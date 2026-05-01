@@ -31,7 +31,7 @@ constructor(
     private val objTypes: ObjTypeList,
 ) {
     public fun process(npc: Npc) {
-        if (!npc.isValidTarget() || npc.isDelayed) {
+        if (!npc.isValidTarget() || npc.isDelayed || npc.isControlLocked) {
             return
         }
 

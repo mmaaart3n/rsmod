@@ -96,6 +96,13 @@ public sealed class PathingEntity {
     public var activeCoroutine: GameCoroutine? = null
     public val routeDestination: RouteDestination = RouteDestination()
     public var routeRequest: RouteRequest? = null
+    /**
+     * Single-tile forced walk consumed by movement processors before [routeRequest] (e.g. spear
+     * knockback).
+     */
+    public var pendingForcedWalkDest: CoordGrid? = null
+    /** Generic control lock clock for movement/chase style processors. */
+    public var controlLockUntil: Int = -1
     // Used for setting temporary move speed for single requests, aka ctrl run mode.
     public var tempMoveSpeed: MoveSpeed? = null
     public var moveSpeed: MoveSpeed = MoveSpeed.Stationary
@@ -153,6 +160,9 @@ public sealed class PathingEntity {
 
     public val cyclesWithoutMovement: Int
         get() = processedMapClock - lastMovement
+
+    public val isControlLocked: Boolean
+        get() = currentMapClock < controlLockUntil
 
     public val isFacingEntity: Boolean
         get() = faceEntity != EntityFaceTarget.NULL

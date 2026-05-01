@@ -26,10 +26,33 @@ constructor(
     private val eventBus: EventBus,
 ) {
     public fun process(player: Player) {
+        if (player.pendingForcedWalkDest != null) {
+            applyPendingForcedWalk(player)
+            player.resetTempSpeed()
+            return
+        }
         player.routeRequest?.let { consumeRequest(player, it) }
         player.routeRequest = null
         player.processMoveSpeed()
         player.resetTempSpeed()
+    }
+
+    private fun applyPendingForcedWalk(player: Player) {
+        val waypoint = player.pendingForcedWalkDest ?: return
+        player.pendingForcedWalkDest = null
+        player.routeRequest = null
+
+        player.cachedMoveSpeed = MoveSpeed.Walk
+        player.moveSpeed = MoveSpeed.Walk
+
+        player.abortRoute()
+        player.routeDestination.add(waypoint)
+
+        player.processWalkTrigger()
+        player.move(steps = 1)
+        if (player.pendingStepCount == 0) {
+            player.routeDestination.clear()
+        }
     }
 
     public fun consumeRequest(player: Player, request: RouteRequest) {

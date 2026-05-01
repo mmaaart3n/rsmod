@@ -210,6 +210,11 @@ public class ProtectedAccess(
     public val vars: VarPlayerIntMapDelegate by lazy { VarPlayerIntMapDelegate.from(player) }
     public val strVars: VarPlayerStrMap by player::strVars
 
+    /**
+     * Collision map for the player's current scene (same instance used by [telejump]/[mapBlocked]).
+     */
+    public val collision: CollisionFlagMap by context::collision
+
     public var actionDelay: Int by player::actionDelay
     public var skillAnimDelay: Int by player::skillAnimDelay
     public var refaceDelay: Int by player::refaceDelay

@@ -652,23 +652,33 @@ constructor(
      *   processing.
      * @param delay The number of cycles to wait before applying the hit. By default, this is set to
      *   `1` for melee hits.
+     * @param retaliateDelay Minimum ticks before queued retaliation runs after this hit is queued.
+     *   Defaults to `1`; spear-style specials pass a larger value so NPC/player counterattacks
+     *   respect a short stun window without delaying the hit queue itself.
      */
     public fun queueMeleeHit(
         source: Player,
         target: PathingEntity,
         damage: Int,
         delay: Int = 1,
+        retaliateDelay: Int = 1,
     ): Hit =
         when (target) {
-            is Npc -> queueMeleeHit(source, target, damage, delay)
-            is Player -> queueMeleeHit(source, target, damage, delay)
+            is Npc -> queueMeleeHit(source, target, damage, delay, retaliateDelay)
+            is Player -> queueMeleeHit(source, target, damage, delay, retaliateDelay)
         }
 
-    private fun queueMeleeHit(source: Player, target: Npc, damage: Int, delay: Int): Hit {
+    private fun queueMeleeHit(
+        source: Player,
+        target: Npc,
+        damage: Int,
+        delay: Int,
+        retaliateDelay: Int,
+    ): Hit {
         // Note: Retaliation must be queued _before_ the hit. If queued after, every hit would
         // trigger the "speed-up" death mechanic, since the hit queues would no longer be the
         // last entries in the queue list at the time of processing.
-        target.queueCombatRetaliate(source)
+        target.queueCombatRetaliate(source, delay = retaliateDelay)
 
         val hit = target.queueHit(source, delay, HitType.Melee, damage, npcHitModifier)
         target.heroPoints(source, min(hit.damage, target.hitpoints))
@@ -676,11 +686,17 @@ constructor(
         return hit
     }
 
-    private fun queueMeleeHit(source: Player, target: Player, damage: Int, delay: Int): Hit {
+    private fun queueMeleeHit(
+        source: Player,
+        target: Player,
+        damage: Int,
+        delay: Int,
+        retaliateDelay: Int,
+    ): Hit {
         // Note: Retaliation must be queued _before_ the hit. If queued after, every hit would
         // trigger the "speed-up" death mechanic, since the hit queues would no longer be the
         // last entries in the queue list at the time of processing.
-        target.queueCombatRetaliate(source)
+        target.queueCombatRetaliate(source, delay = retaliateDelay)
 
         val hit = target.queueHit(source, delay, HitType.Melee, damage)
         target.heroPoints(source, min(hit.damage, target.hitpoints))

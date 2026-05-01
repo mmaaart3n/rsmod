@@ -88,7 +88,7 @@ constructor(
     private val locInteractions: AiLocInteractions,
 ) {
     public fun process(npc: Npc) {
-        if (!npc.isValidTarget() || npc.isDelayed) {
+        if (!npc.isValidTarget() || npc.isDelayed || npc.isControlLocked) {
             return
         }
         val huntType = huntModes[npc.huntMode] ?: return

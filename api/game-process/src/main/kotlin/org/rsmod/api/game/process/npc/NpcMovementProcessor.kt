@@ -24,10 +24,51 @@ constructor(
     private val eventBus: EventBus,
 ) {
     public fun process(npc: Npc) {
+        if (npc.pendingForcedWalkDest != null) {
+            applyPendingForcedWalk(npc)
+            npc.resetTempSpeed()
+            return
+        }
+        if (npc.isControlLocked) {
+            npc.routeRequest = null
+            npc.abortRoute()
+            npc.resetTempSpeed()
+            return
+        }
         npc.routeRequest?.let { consumeRequest(npc, it) }
         npc.routeRequest = null
         npc.processMovement()
         npc.resetTempSpeed()
+    }
+
+    /**
+     * Ignores any [Npc.routeRequest] for this cycle (e.g. combat chase) so a one-tile knockback is
+     * not overwritten by [org.rsmod.api.npc.interact.AiPlayerInteractions.interactAp] in
+     * [org.rsmod.api.game.process.npc.NpcModeProcessor], which runs before movement.
+     */
+    private fun applyPendingForcedWalk(npc: Npc) {
+        val waypoint = npc.pendingForcedWalkDest ?: return
+        npc.pendingForcedWalkDest = null
+        npc.routeRequest = null
+
+        val collisionStrat =
+            npc.collisionStrategy
+                ?: run {
+                    npc.abortRoute()
+                    return
+                }
+
+        npc.cachedMoveSpeed = MoveSpeed.Walk
+        npc.moveSpeed = MoveSpeed.Walk
+
+        npc.abortRoute()
+        npc.routeDestination.add(waypoint)
+
+        npc.processWalkTrigger()
+        npc.move(steps = 1, collision = collisionStrat)
+        if (npc.pendingStepCount == 0) {
+            npc.routeDestination.clear()
+        }
     }
 
     public fun consumeRequest(npc: Npc, request: RouteRequest) {

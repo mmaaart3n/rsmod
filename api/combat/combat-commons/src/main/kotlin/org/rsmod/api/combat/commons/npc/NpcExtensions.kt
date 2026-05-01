@@ -23,6 +23,9 @@ private var Npc.aggressivePlayer by typePlayerUidVarn(varns.aggressive_player)
 private var Npc.attackingPlayer by typePlayerUidVarn(varns.attacking_player)
 
 public fun Npc.canRetaliate(): Boolean {
+    if (isControlLocked) {
+        return false
+    }
     if (actionDelay + constants.combat_activecombat_delay < currentMapClock) {
         return true
     }
@@ -41,7 +44,7 @@ public fun Npc.combatDefaultRetaliateOp(interactions: AiPlayerInteractions) {
     }
     val target = interactions.resolvePlayer(aggressivePlayer) ?: return
     attackingPlayer = target.uid
-    actionDelay = currentMapClock + (attackRate() / 2)
+    actionDelay = max(actionDelay, currentMapClock + (attackRate() / 2))
     retaliate(target, interactions, ap = false)
 }
 
@@ -51,7 +54,7 @@ public fun Npc.combatDefaultRetaliateAp(interactions: AiPlayerInteractions) {
     }
     val target = interactions.resolvePlayer(aggressivePlayer) ?: return
     attackingPlayer = target.uid
-    actionDelay = currentMapClock + (attackRate() / 2)
+    actionDelay = max(actionDelay, currentMapClock + (attackRate() / 2))
     retaliate(target, interactions, ap = true)
 }
 

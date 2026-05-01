@@ -35,8 +35,8 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Granite maul | `granite_maul`, `granite_maul_pretty`, `granite_maul_plus`, `granite_maul_pretty_plus`, `br_granite_maul` | Quick Smash | enum-driven | melee | medium | implemented (partial) | melee hit + spec anim/spot; instant queue nuance ontbreekt | Spawn/equip -> toggle special -> `Attack` NPC -> verify energy drain + hit + no exception |
 | Dragon longsword | `dragon_longsword`, `bh_dragon_longsword_imbue`, `bh_dragon_longsword_corrupted` | Cleave | enum-driven | melee | low | implemented | melee damage/accuracy multiplier + cleave gfx | Spawn/equip -> toggle special -> `Attack` NPC -> verify boosted hit + energy |
-| Dragon spear family | `dragon_spear`, `dragon_spear_p`, `dragon_spear_p+`, `dragon_spear_p++`, BH/corrupt variants | Shove | enum-driven | melee utility | high | implemented (partial) | boosted shove-hit + recovery delay; forced movement/stun fidelity nog pending | Spawn/equip -> toggle special -> attack NPC/player -> verify hit + energy + shorter recovery window |
-| Zamorakian spear/hasta | `zamorak_spear`, `zamorak_hasta` | Shove | enum-driven | melee utility | high | implemented (partial) | gedeelde spear-shove met boosted hit; exacte forced movement/stun nog pending | Spawn/equip -> toggle special -> attack target -> verify hit + energy |
+| Dragon spear family | `dragon_spear`, `dragon_spear_p`, `dragon_spear_p+`, `dragon_spear_p++`, BH/corrupt variants | Shove | enum-driven | melee utility | high | implemented (partial) | melee hit + stunned gfx + **walk-protocol** 1-tile shove via `pendingForcedWalkDest` (geen telejump) voor 1×1 NPCs + player chase suppression + player delay fix + improved NPC counterattack delay | Test liever robuuste 1×1 NPC met genoeg HP; verify walk-step visueel (geen teleport-snap), blocked tile = geen shove |
+| Zamorakian spear/hasta | `zamorak_spear`, `zamorak_hasta` | Shove | enum-driven | melee utility | high | implemented (partial) | zelfde spear stack als dragon spear family | Zelfde smoke als dragon spear |
 | Magic shortbow | `magic_shortbow`, `magic_shortbow_i` | Snapshot | enum-driven | ranged | medium | implemented | quiver ammo checks, double projectile/hit queue | Spawn/equip -> load arrows -> toggle special -> `Attack` NPC -> verify 2 hits + energy |
 | Dragon crossbow | `xbows_crossbow_dragon`, `bh_xbows_crossbow_dragon_corrupted` | Annihilate | enum-driven | ranged | low | implemented | crossbow projectile + boosted ranged hit | Spawn/equip -> load bolts -> toggle special -> `Attack` NPC -> verify hit + energy |
 | Armadyl crossbow | `acb`, `br_acb` | Armadyl Eye | enum-driven | ranged | medium | implemented (partial) | boosted ranged roll; exact armour-pierce formula deferred | Spawn/equip -> load bolts -> toggle special -> `Attack` NPC -> verify hit + energy |
@@ -72,7 +72,7 @@
 | Voidwaker | Disrupt | enum-driven | no | magic-typed hit met projectile/impact | custom hit type, projectile/spotanim | implemented (partial) |
 | Ancient godsword | Blood Sacrifice | enum-driven | no | delayed effect | delayed effect queue, PvP tuning | implemented (partial) |
 | Barrelchest anchor | Sunder | enum-driven | no | heavy crush hit + spec gfx | melee multiplier + animation/spotanim | implemented |
-| Dragon spear / Zamorakian spear / Zamorak hasta | Shove / Impale | enum-driven | no | shove-hit met combat delay control | forced movement, stun immunity, PvP-safe handling | partial |
+| Dragon spear / Zamorakian spear / Zamorak hasta | Shove / Impale | enum-driven | no | melee hit + stunned gfx + forced walk knockback (`pendingForcedWalkDest`) + victim action lock + retaliate delay + large NPC guard | volledige OSRS fidelity / RSProx walk deltas | partial |
 | Rune thrownaxe | Chainhit | enum-driven | no | primary ranged hit + delayed chain follow-up | target chaining, multi-target queueing | partial |
 
 ## Implementation groups
@@ -175,6 +175,27 @@
   - Ancient godsword
 - Added explicit energy fallback mappings for new families in `SpecialAttackWeapons` to avoid enum-gaps blocking startup on variant items.
 - RSProx packet-level verification for these newly added complex specials is prepared but still requires a dedicated interactive capture run (normal vs special per family) before marking full-fidelity as complete.
+
+## Spear family MVP status
+- Scope: `dragon_spear*`, `zamorak_spear`, `zamorak_hasta`.
+- Implemented:
+  - melee hit/hitsplat timing via `queueMeleeHit` met standaard hit-delay; bij succesvolle hit extra `retaliateDelay = 4` zodat NPC/player retaliate niet de hitsplat-timing verschuift maar wel later uitvoert
+  - stunned gfx (`walkTrigger` + spotanim) bij `damage > 0`
+  - **Knockback:** 1 tile weg van attacker via **`PathingEntity.pendingForcedWalkDest`** → movement processors doen één **validated walk-step** (`NpcPostTickProcess` walk delta), niet `telejump`. Wordt vóór `routeRequest` verwerkt zodat combat-chase het niet overschrijft. Alleen **`Npc.size == 1`**; anders melding aan speler: `That creature is too large to knock back!` (hit/stun blijven zoals gekozen gedrag).
+  - **Post-shove chase suppression:** bij succesvolle spear-hit geen directe `continueCombat`; source route+interaction worden gecleared zodat de speler niet meteen 1 tile terugchased in dezelfde flow.
+  - geblokkeerde/invalid tile achter target → geen shove (geen teleport fallback)
+  - **NPC counterattack delay improved:** retaliate blijft vertraagd (`retaliateDelay` + `actionDelay` max-pad) zonder `target.delay`.
+  - **Stun/control:** `max(target.actionDelay, clock + 4)` voor Player target (geen globale `target.delay`)
+  - player volgende aanval: `WeaponSpeeds.actual` → `setNextAttackDelay`; retaliate-path blijft `max(actionDelay, …)` in `combatDefaultRetaliateOp`/`Ap`
+  - reguliere special energy flow
+- Runtime smoke-tip: cows gaan vaak dood — gebruik een **1×1 NPC met meer HP** of lagere damage om vooral **beweging vóór death** te zien.
+- Limitations / pending verification:
+  - Markeer shove als **visually OK** pas na runtime-check (walk packet vs teleport-snap).
+  - **Full NPC movement lock during stun** is nog partial/deferred; NPC kan in sommige situaties nog eerder route-opbouw krijgen dan gewenst.
+  - **Full NPC action lock during stun** is nog partial/deferred; exacte aanvalsblokkade over volledige stun-window vraagt nog tuning.
+  - **Exacte OSRS stun duration/fidelity** (4-5 ticks) nog niet definitief gevalideerd.
+  - Large NPCs worden niet teruggeduwd en tonen: `That creature is too large to knock back!`.
+  - Geen `target.delay`: dit blijft bewust vermeden i.v.m. interferentie met hit/hitsplat queues.
 
 ## Batch 2 runtime result summary
 | Weapon | Runtime result | Evidence | Notes |

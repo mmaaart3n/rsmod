@@ -188,7 +188,8 @@ constructor(private val objTypes: ObjTypeList, private val manager: PlayerAttack
         target: PathingEntity,
         damage: Int,
         delay: Int = 1,
-    ): Hit = manager.queueMeleeHit(source.player, target, damage, delay)
+        retaliateDelay: Int = 1,
+    ): Hit = manager.queueMeleeHit(source.player, target, damage, delay, retaliateDelay)
 
     /** @see [PlayerAttackManager.rollRangedDamage] */
     public fun rollRangedDamage(
